@@ -1,0 +1,12 @@
+var harboroughQueries = {"name":"GrassCuttingQueries","type":"FeatureCollection"
+,"features":[
+{"type":"Feature","geometry":{"type":"Point","coordinates":[-1.26917445036444,52.4871559630802]},"properties":{"USRN":"16402074","CUT_STATUS":"Not/Part Cut - Parked Cars"}}
+,{"type":"Feature","geometry":{"type":"Point","coordinates":[-0.894212710048055,52.5554060035836]},"properties":{"USRN":"16402584","CUT_STATUS":"Not/Part Cut - Parked Cars"}}
+,{"type":"Feature","geometry":{"type":"Point","coordinates":[-0.892455152487522,52.5554041981829]},"properties":{"USRN":"16400277","CUT_STATUS":"Not/Part Cut - Parked Cars"}}
+,{"type":"Feature","geometry":{"type":"Point","coordinates":[-0.773432631133206,52.5216576214997]},"properties":{"USRN":"16400794","CUT_STATUS":"Not/Part Cut - Parked Cars"}}
+,{"type":"Feature","geometry":{"type":"Point","coordinates":[-0.977172719502953,52.6022128998551]},"properties":{"USRN":"16402107","CUT_STATUS":"Not/Part Cut - Stones"}}
+,{"type":"Feature","geometry":{"type":"Point","coordinates":[-0.972538834857851,52.6005421897563]},"properties":{"USRN":"16402111","CUT_STATUS":"Not/Part Cut - Other"}}
+,{"type":"Feature","geometry":{"type":"Point","coordinates":[-0.973838444230508,52.6034647097992]},"properties":{"USRN":"16400409","CUT_STATUS":"Not/Part Cut - Parked Cars"}}
+,{"type":"Feature","geometry":{"type":"Point","coordinates":[-0.792588538600002,52.5972777787637]},"properties":{"USRN":"16400497","CUT_STATUS":"Not/Part Cut - Parked Cars"}}
+,{"type":"Feature","geometry":{"type":"Point","coordinates":[-0.894308915324475,52.5555604256528]},"properties":{"USRN":"16402584","CUT_STATUS":"Not/Part Cut - Flowers"}}
+]}

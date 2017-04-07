@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Leicestershire Grass cutting (OS)</title>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/google_search.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet.markercluster@1.0.4/dist/leaflet.markercluster.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.4/dist/MarkerCluster.Default.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.0.4/dist/MarkerCluster.css" />
+
+	<!-- <script src="https://unpkg.com/leaflet.vectorgrid@1.2.0"></script> -->
+	<script type="text/javascript" src="layers/GrassCutting_blaby.json"></script>
+	<script type="text/javascript" src="layers/GrassCutting_charnwood.json"></script>
+	<script type="text/javascript" src="layers/GrassCutting_Harborough.json"></script>
+	<script type="text/javascript" src="layers/GrassCutting_hinck.json"></script>
+	<script type="text/javascript" src="layers/GrassCutting_melton.json"></script>
+	<script type="text/javascript" src="layers/GrassCutting_nwlei.json"></script>
+	<script type="text/javascript" src="layers/GrassCutting_oadby.json"></script>
+	<script type="text/javascript" src="layers/GrassCuttingQueries_hinck.json"></script>
+	<script type="text/javascript" src="layers/GrassCuttingQueries_Harborough.json"></script>
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCBVlC5gC-sL8gGtw1mU3onfL1e615XUPg&libraries=places"></script>
+
+</head>
+<body style='margin:0'>
+  
+  <div class="container-fluid">
+  
+  <div class=""><h1><span class="badge badge-info">ALPHA</span> Grass cutting asset map [Openstreetmap]</h1></div>
+	
+	<div id="map" style="width: 100vw; height: 100vh"></div>
+	
+	</div>
+
+	<script>
+	// Google api key = "AIzaSyCBVlC5gC-sL8gGtw1mU3onfL1e615XUPg"
+		var map = L.map('map');
+
+		var AFurl = "https://leicestershirecc-self.achieveservice.com/en/AchieveForms/?form_uri=sandbox-publish://AF-Process-8d78e1d9-dd1f-4b6f-922c-11726a0a29dc/AF-Stage-c8347d00-cbd8-4eb0-9188-97ac29777b1e/definition.json&redirectlink=%2F&cancelRedirectLink=%2F&category=AF-Category-33e8f99b-2cdf-4596-a6a9-7830e80a7192";
+
+		// // OS Master map tile
+
+		// L.tileLayer('https://api2.ordnancesurvey.co.uk/mapping_api/v1/service/zxy/EPSG%3A3857/Outdoor 3857/{z}/{x}/{y}.png?key=8HV8Q7LYOGzeqSEfbZaL7IYINJDIKXch', {
+		// 	attribution: 'Contains OS data © Crown copyright and database right (2017)',
+		// 	maxZoom: 18,
+		// 	opacity: 1
+		// }).addTo(map);
+
+		// Openstreet map tile
+
+	    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+	        maxZoom: 18
+	    }).addTo(map);
+
+		map.setView({ lat: 52.5969184, lng: -1.3067384 }, 11);
+
+		var GooglePlacesSearchBox = L.Control.extend({
+			  onAdd: function() {
+			    var element = document.createElement("input");
+			    element.id = "origin-input";
+			    element.placeholder = "Your Location";
+			    return element;
+			  }
+		});
+		(new GooglePlacesSearchBox({ position: 'topleft' })).addTo(map);
+
+		var input = document.getElementById("origin-input");
+		
+		var searchBox = new google.maps.places.SearchBox(input);
+
+		searchBox.addListener('places_changed', function() {
+		  var places = searchBox.getPlaces();
+
+		  if (places.length == 0) {
+		    return;
+		  }
+
+		  var group = L.featureGroup();
+
+		  places.forEach(function(place) {
+
+		    // Create a marker for each place.
+		    var marker = L.marker([
+		      place.geometry.location.lat(),
+		      place.geometry.location.lng()
+		    ]);
+		    group.addLayer(marker);
+		  });
+
+		  group.addTo(map);
+		  
+		  map.fitBounds(group.getBounds());
+
+		});
+
+		function onEachFeatureGrass(feature, layer) {
+
+		    if (feature.properties) {
+		        layer.bindPopup("<b>ROAD: </b>"+ feature.properties.ROAD_NAME + "<br>" + "<b>PARISH: </b>"+ feature.properties.PARISH + "<br>" + "<b>LAST CUT DATE: </b>"+ feature.properties.ROUTE_LAST_CUT_DATE + "<br>" + "<b>CUT STATUS: </b>"+ feature.properties.CUT_STATUS + "<br>" + "<a href="+ AFurl + "&streetRef=" + feature.properties.USRN + "&assetRef=" + feature.properties.CENTRAL_ASSET_ID + ">" + "Report an issue" + "</a>");
+		    }
+		}
+
+		function onEachFeatureIssue(feature, layer) {
+
+		    if (feature.properties) {
+		        layer.bindPopup("<b>CUT STATUS: </b>"+ "<br>" + feature.properties.CUT_STATUS);
+		    }
+
+		}
+
+		//Reset the origin_input box on click
+	    input.addEventListener('click', function(){
+	        input.value = "";
+	    });
+
+		var alertIcon = L.icon({
+			    iconUrl: 'img/error_red.png',
+			    iconSize: [36,36]
+		});
+
+		L.geoJson(blaby, {
+			onEachFeature: onEachFeatureGrass
+		}).addTo(map);
+		L.geoJson(charnwood, {
+			onEachFeature: onEachFeatureGrass
+		}).addTo(map);
+		L.geoJson(harborough, {
+			onEachFeature: onEachFeatureGrass
+		}).addTo(map);
+		L.geoJson(melton, {
+			onEachFeature: onEachFeatureGrass
+		}).addTo(map);
+		L.geoJson(nwlei, {
+			onEachFeature: onEachFeatureGrass
+		}).addTo(map);
+		L.geoJson(oadby, {
+			onEachFeature: onEachFeatureGrass
+		}).addTo(map);
+		var harboroughCluster = L.geoJson(harboroughQueries, {
+			onEachFeature: onEachFeatureIssue,
+			pointToLayer: function(feature,latlng){
+			  return L.marker(latlng,{icon: alertIcon});
+		    }
+		}).addTo(map);
+		var hinckCluster = L.geoJson(hinckQueries, {
+			onEachFeature: onEachFeatureIssue,
+			pointToLayer: function(feature,latlng){
+			  return L.marker(latlng,{icon: alertIcon});
+		    }
+		}).addTo(map);
+
+		var clusters = L.markerClusterGroup();
+			clusters.addLayer(harboroughCluster);
+			clusters.addLayer(hinckCluster);
+			map.addLayer(clusters);
+
+	</script>
+
+</body>
+</html>

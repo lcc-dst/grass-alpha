@@ -1,0 +1,5 @@
+var hinckQueries = {"name":"GrassCuttingQueries","type":"FeatureCollection"
+,"features":[
+{"type":"Feature","geometry":{"type":"Point","coordinates":[-1.28030448212532,52.6336789783881]},"properties":{"USRN":"17400382","CUT_STATUS":"Not/Part Cut - Steep/Wet Bank "}}
+,{"type":"Feature","geometry":{"type":"Point","coordinates":[-1.28113323758182,52.6334146223835]},"properties":{"USRN":"17400382","CUT_STATUS":"Not/Part Cut - Parked Cars"}}
+]}
